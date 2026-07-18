@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "NYT Sudoku Progress",
+  "description": "Read-only progress summary for NYT Sudoku games played in SudokuPad.",
+  "version": "0.1.0",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "NYT Sudoku Progress"
+  },
+  "permissions": ["tabs"],
+  "host_permissions": ["https://sudokupad.app/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://sudokupad.app/*"],
+      "js": ["assets/content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
