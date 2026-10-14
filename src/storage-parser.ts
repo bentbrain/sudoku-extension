@@ -8,62 +8,6 @@ import type {
 
 const difficulties = ["easy", "medium", "hard"] as const satisfies readonly Difficulty[];
 
-const monthByName: Record<string, string> = {
-  january: "01",
-  february: "02",
-  march: "03",
-  april: "04",
-  may: "05",
-  june: "06",
-  july: "07",
-  august: "08",
-  september: "09",
-  october: "10",
-  november: "11",
-  december: "12",
-};
-
-export function parseProgressEntry(value: string): ProgressEntry | null {
-  try {
-    const parsed = JSON.parse(value) as {
-      puzzleId?: unknown;
-      shortid?: unknown;
-      time?: unknown;
-    };
-    if (typeof parsed.shortid !== "string") return null;
-
-    const match = /^nyt\/(\d{4})(\d{2})(\d{2})(easy|medium|hard)$/.exec(
-      parsed.shortid,
-    );
-    if (!match) return null;
-
-    return {
-      date: `${match[1]}-${match[2]}-${match[3]}`,
-      difficulty: match[4] as Difficulty,
-      puzzleId:
-        typeof parsed.puzzleId === "string" ? parsed.puzzleId : parsed.shortid,
-      shortid: parsed.shortid,
-      updatedAt: typeof parsed.time === "number" ? parsed.time : undefined,
-    };
-  } catch {
-    return null;
-  }
-}
-
-export function parseCompletionKey(key: string): CompletionEntry | null {
-  const match =
-    /^newyorktimes-([a-z]+)(\d{1,2}),(\d{4})(easy|medium|hard)$/.exec(key);
-  if (!match) return null;
-
-  const month = monthByName[match[1]];
-  if (!month) return null;
-
-  return {
-    date: `${match[3]}-${month}-${match[2].padStart(2, "0")}`,
-    difficulty: match[4] as Difficulty,
-  };
-}
-
 export function buildDayProgress(
   progress: ProgressEntry[],
   completions: CompletionEntry[],
